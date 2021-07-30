@@ -3,7 +3,7 @@ from models import db
 
 association_table = db.Table('association',
     db.Column('book_id', db.ForeignKey('book.id')),
-    db.Column('author_id', db.ForeignKey('author.id'))
+    db.Column('authors_id', db.ForeignKey('authors.id'))
 )
 
 class Book(db.Model):
@@ -21,7 +21,6 @@ class Authors(db.Model):
    id = db.Column(db.Integer, primary_key=True)
    first_name = db.Column(db.Text)
    second_name = db.Column(db.DateTime, index=True, default=datetime.utcnow)
-   user_id = db.Column(db.Integer, db.ForeignKey('Book.id'))
    books = db.relationship(
         "Book",
         secondary=association_table,

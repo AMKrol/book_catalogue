@@ -1,7 +1,7 @@
 from models import app, db
 from models.book import Book
 from models.authors import Authors
-from models.rent import Status
+from models.status import Status
 from flask import Flask, render_template, request, flash
 from flask import redirect, url_for
 

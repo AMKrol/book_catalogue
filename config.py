@@ -8,3 +8,5 @@ class Config:
            'sqlite:///' + os.path.join(BASE_DIR, 'book_catalogue.db')
    )
    SQLALCHEMY_TRACK_MODIFICATIONS = False
+
+   template_dir = os.path.join(BASE_DIR, "templates")

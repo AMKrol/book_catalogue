@@ -1,30 +1,25 @@
-from datetime import datetime
 from models import db
 
-association_table = db.Table('association',
-    db.Column('book_id', db.ForeignKey('book.id')),
-    db.Column('authors_id', db.ForeignKey('authors.id'))
+author = db.Table('author',
+    db.Column("book_id", db.Integer, db.ForeignKey("book.book_id")),
+    db.Column("authors_id", db.Integer, db.ForeignKey("authors.authors_id"))
 )
-
 class Book(db.Model):
-   id = db.Column(db.Integer, primary_key=True)
-   title = db.Column(db.String(100), index=True, unique=True)
-   release_year = db.Column(db.String(200), index=True, unique=True)
+   book_id = db.Column(db.Integer, primary_key=True)
+   title = db.Column(db.String(100))
+   release_year = db.Column(db.String(200))
    status = db.Column(db.String(128))
-   authors = db.relationship("Authors", secondary=association_table,
-        back_populates="book")
+   authors = db.relationship("Authors",
+                    secondary="author",
+                    backref=db.backref("book_title", lazy="dynamic"))
 
    def __str__(self):
        return f"<User {self.username}>"
 
 class Authors(db.Model):
-   id = db.Column(db.Integer, primary_key=True)
+   authors_id = db.Column(db.Integer, primary_key=True)
    first_name = db.Column(db.Text)
-   second_name = db.Column(db.DateTime, index=True, default=datetime.utcnow)
-   books = db.relationship(
-        "Book",
-        secondary=association_table,
-        back_populates="authors")
+   second_name = db.Column(db.Text)
 
    def __str__(self):
        return f"<Post {self.id} {self.body[:50]} ...>"

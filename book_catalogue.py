@@ -19,4 +19,8 @@ def make_shell_context():
 def homepage():
     return render_template("homepage.html")
 
+@app.route("/book_list")
+def show_book_list():
+    book_list = Book.query.all()
+    return render_template("book_list.html", book_list=book_list)
 

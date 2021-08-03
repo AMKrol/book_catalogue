@@ -37,5 +37,7 @@ class CatalogueSQLLite():
     def get_all_authors(self):
         return Authors.query.all()
 
-    def delete(self):
-        pass
+    def delete_author(self, author_id):
+        author = Authors.query.get(author_id)
+        db.session.delete(author)
+        db.session.commit()

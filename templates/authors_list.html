@@ -22,10 +22,10 @@
                 <td>{{ author.first_name }}</td>
                 <td>{{ author.second_name }}</td>
                 <td>
-                    <!-- <form method="GET" action="{{ url_for('homepage', product_name=item) }}">
-                        <input type="hidden" name="product_name" value="{{ item }}"></input>
-                        <input type="submit" value="Sell element"></input>
-                    </form> -->
+                    <form method="POST" action="{{ url_for('show_authors_list') }}">
+                        <input type="hidden" name="author_id" value="{{ author.id }}"></input>
+                        <input type="submit" value="Delete author"></input>
+                    </form>
                 </td>
             </tr>
             {% endfor %}

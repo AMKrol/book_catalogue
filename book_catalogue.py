@@ -44,5 +44,11 @@ def add_book():
 @app.route("/authors_list", methods=["GET"])
 def show_authors_list():
     authors_list = book_db.get_all_authors()
-    print(authors_list)
     return render_template("authors_list.html", authors_list=authors_list)
+
+
+@app.route("/authors_list", methods=["POST"])
+def author_list_remove():
+    author_id = request.form.get("author_id")
+    book_db.delete_author(author_id)
+    return redirect(url_for("show_authors_list"))

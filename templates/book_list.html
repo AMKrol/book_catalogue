@@ -10,9 +10,9 @@
         <thead>
             <tr>
                 <th>#</th>
-                <th>Tytuł</th>
-                <th>Autorzy</th>
-                <th>Data wydania</th>
+                <th>Title</th>
+                <th>Authors</th>
+                <th>Release year</th>
                 <th>Status</th>
                 <th></th>
             </tr>
@@ -36,13 +36,14 @@
                 </td>
             </tr>
             {% endfor %}
-            <form method="POST" anction="/products">
-                <td> </td>
-                <td><input name="item_name" placeholder="Name" value={{item_name}}></input></td>
-                <td><input name="item_quantity" placeholder="Quantity" value={{item_quantity}}></input></td>
-                <td><input name="item_unit" placeholder="Sell unit" value={{item_unit}}></input></td>
-                <td><input name="item_unit_price" placeholder="Unit price" value={{item_unit_price}}></input> </td>
-                <td><input type="submit" value="Add element"></td>
+
+            <form method="POST" action="/add_book">
+                <td>{{ form.csrf_token }}</td>
+                <td>{{ form.title }}</td>
+                <td>{{ form.authors }}</td>
+                <td>{{ form.release_year }}</td>
+                <td>{{ form.status }}</td>    
+                <td><input type="submit" value="Add item"></td>
             </form>
         </tbody>
     </table>

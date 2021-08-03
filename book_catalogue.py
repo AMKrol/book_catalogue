@@ -26,18 +26,23 @@ def homepage():
     return render_template("homepage.html")
 
 
-@app.route("/book_list")
+@app.route("/book_list", methods=["GET"])
 def show_book_list():
     form = AddBookForm()
     book_list = book_db.get_all_book()
     return render_template("book_list.html", book_list=book_list, form=form)
+
+@app.route("/book_list", methods=["POST"])
+def book_remove():
+    book_id = request.form.get("book_id")
+    book_db.delete_book(book_id)
+    return redirect(url_for("show_book_list"))
 
 
 @app.route("/add_book", methods=["POST"])
 def add_book():
     data = request.form
     book_db.create(data)
-
     return redirect(url_for("show_book_list"))
 
 

@@ -41,3 +41,8 @@ class CatalogueSQLLite():
         author = Authors.query.get(author_id)
         db.session.delete(author)
         db.session.commit()
+
+    def delete_book(self, book_id):
+        book = Book.query.get(book_id)
+        db.session.delete(book)
+        db.session.commit()

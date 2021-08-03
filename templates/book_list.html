@@ -29,9 +29,9 @@
                 <td>{{ book.release_year }}</td>
                 <td>{{ book.status.first().status_name }}</td>
                 <td>
-                    <form method="GET" action="{{ url_for('homepage', product_name=item) }}">
-                        <input type="hidden" name="product_name" value="{{ item }}"></input>
-                        <input type="submit" value="Sell element"></input>
+                    <form method="POST" action="{{ url_for('book_remove') }}">
+                        <input type="hidden" name="book_id" value="{{ book.id }}"></input>
+                        <input type="submit" value="Delete element"></input>
                     </form>
                 </td>
             </tr>

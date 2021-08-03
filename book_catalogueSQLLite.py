@@ -34,5 +34,8 @@ class CatalogueSQLLite():
     def get_all_book(self):
         return Book.query.all()
 
+    def get_all_authors(self):
+        return Authors.query.all()
+
     def delete(self):
         pass

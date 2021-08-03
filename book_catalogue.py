@@ -39,3 +39,10 @@ def add_book():
     book_db.create(data)
 
     return redirect(url_for("show_book_list"))
+
+
+@app.route("/authors_list", methods=["GET"])
+def show_authors_list():
+    authors_list = book_db.get_all_authors()
+    print(authors_list)
+    return render_template("authors_list.html", authors_list=authors_list)

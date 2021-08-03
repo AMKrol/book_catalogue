@@ -1,3 +1,4 @@
+from models import authors
 from models.book import Book
 from models.status import Status
 from models.authors import Authors
@@ -20,10 +21,12 @@ class CatalogueSQLLite():
         authors_list = authors.split(", ")
         for autor in authors_list:
             aut = autor.split(" ")
-            exists = db.session.query(Authors.id).filter_by(first_name=aut[0], second_name=aut[1]).first() is not None
+            exists = db.session.query(Authors.id).filter_by(
+                first_name=aut[0], second_name=aut[1]).first() is not None
             a = ""
             if exists:
-                a = db.session.query(Authors.id).filter_by(first_name=aut[0], second_name=aut[1]).first()
+                a = db.session.query(Authors.id).filter_by(
+                    first_name=aut[0], second_name=aut[1]).first()
                 a = Authors.query.get(a)
             else:
                 a = Authors(first_name=aut[0], second_name=aut[1])
@@ -36,6 +39,21 @@ class CatalogueSQLLite():
 
     def update(self):
         pass
+
+    def get_info_for_update(self, book_id):
+        book = Book.query.get(book_id)
+
+        authors_list = []
+        for author in book.authors:
+            authors_list.append(author.first_name + " " + author.second_name)
+        authors_list = ", ".join(authors_list)
+
+        if book.status.first().status_name == "borrowed":
+            status = "borrowed"
+        else:
+            status = "on stock"
+
+        return [book.title, authors_list, book.release_year, status]
 
     def get_all_book(self):
         return Book.query.all()

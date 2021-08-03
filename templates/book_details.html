@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+<h1 class="mt-5">Lista Książek</h1>
+
+<div class="table-responsive">
+    <form method="POST" action="/bokok_details">
+                {{ form.csrf_token }}
+                {{ form.title.label }} {{ form.title }} <br>
+                {{form.authors.label }} {{ form.authors }}<br>
+                {{ form.release_year.label }} {{ form.release_year }}<br>
+                {{ form.status }}<br>
+                <input type="submit" value="Update">
+            </form>
+</div>
+
+
+{% endblock %}

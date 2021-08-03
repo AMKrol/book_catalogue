@@ -15,6 +15,7 @@
                 <th>Release year</th>
                 <th>Status</th>
                 <th></th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -28,6 +29,12 @@
                 </td>
                 <td>{{ book.release_year }}</td>
                 <td>{{ book.status.first().status_name }}</td>
+                <td>
+                    <form method="GET" action="{{ url_for('show_book_details') }}">
+                        <input type="hidden" name="book_id" value="{{ book.id }}"></input>
+                        <input type="submit" value="Book details"></input>
+                    </form>
+                </td>
                 <td>
                     <form method="POST" action="{{ url_for('book_remove') }}">
                         <input type="hidden" name="book_id" value="{{ book.id }}"></input>

@@ -20,8 +20,14 @@ class CatalogueSQLLite():
         authors_list = authors.split(", ")
         for autor in authors_list:
             aut = autor.split(" ")
-            a = Authors(first_name=aut[0], second_name=aut[1])
-            db.session.add(a)
+            exists = db.session.query(Authors.id).filter_by(first_name=aut[0], second_name=aut[1]).first() is not None
+            a = ""
+            if exists:
+                a = db.session.query(Authors.id).filter_by(first_name=aut[0], second_name=aut[1]).first()
+                a = Authors.query.get(a)
+            else:
+                a = Authors(first_name=aut[0], second_name=aut[1])
+                db.session.add(a)
             a.book_title.append(book)
 
         status_db = Status(status_name=status, book=book)

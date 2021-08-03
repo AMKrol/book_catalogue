@@ -66,8 +66,28 @@ def show_book_details():
     book_form = UpdateBookForm()
     [title, authors_list, release_year,
         status] = book_db.get_info_for_update(book_id)
+    book_form.book_id.data = book_id
     book_form.title.data = title
     book_form.authors.data = authors_list
     book_form.release_year.data = release_year
     book_form.status.process_data(status)
     return render_template("book_details.html", form=book_form)
+
+
+@app.route("/book_details", methods=["POST"])
+def update_book_details():
+    data = request.form
+
+    book = Book.query.get(data["book_id"])
+    authors_list = []
+    for author in book.authors:
+        authors_list.append(author.first_name + " " + author.second_name)
+    authors_list = ", ".join(authors_list)
+
+    if not all([data["title"] == book.title, 
+            book.release_year == data["release_year"],
+            data["authors"] == authors_list,
+            data["status"] == book.status.first().status_name]):
+        print("jest zmiana")
+
+    return "hello"

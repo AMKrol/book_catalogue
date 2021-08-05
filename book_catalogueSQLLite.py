@@ -1,6 +1,8 @@
+from os import stat
 from re import T
-from models import authors
-from models.book import Book
+
+from sqlalchemy.sql.elements import BinaryExpression
+from models.book import Book, author
 from models.status import Status
 from models.authors import Authors
 from models import db
@@ -38,8 +40,80 @@ class CatalogueSQLLite():
         db.session.add(status_db)
         db.session.commit()
 
-    def update(self):
-        pass
+    def update(self, data):
+        book = Book.query.get(data.get("book_id"))
+
+        new_authors_list = data.get("authors")
+
+        old_book_authors = []
+        for author in book.authors:
+            old_book_authors.append(author.first_name + " " + author.second_name)
+        old_book_authors = ", ".join(old_book_authors)
+
+        if not all([data.get("title") == book.title, 
+            book.release_year == data.get("release_year"),
+            new_authors_list == old_book_authors,
+            data.get("status") == book.status.first().status_name]):
+            book.title = data.get("title")
+
+            status_db = db.session.query(Status.id).filter_by(
+                        book_id=data.get("book_id")).first()
+            print(status_db)
+            status_db = Status.query.get(status_db)
+            print(status_db)
+            status_db.status_name = data.get("status")
+            book.status.append(status_db)
+
+            book.release_year = data.get("release_year")
+
+            new_authors_list_split = new_authors_list.split(", ")
+            old_book_authors_split = old_book_authors.split(", ")
+
+            new_authors_list_split_as_set = set(new_authors_list_split)
+            old_book_authors_split_as_set = set(old_book_authors_split)
+
+            intersect_authors_list = list(old_book_authors_split_as_set.intersection(new_authors_list_split_as_set))
+
+            author_list_to_add = new_authors_list_split
+            for aut in intersect_authors_list:
+                author_list_to_add.remove(aut)
+            for aut in old_book_authors_split:
+                try:
+                    author_list_to_add.remove(aut)
+                except:
+                    pass
+
+            author_list_to_remove = old_book_authors_split
+            for aut in intersect_authors_list:
+                author_list_to_remove.remove(aut)
+            for aut in new_authors_list:
+                try:
+                    author_list_to_remove.remove(aut)
+                except:
+                    pass
+            
+            for aut in author_list_to_add:
+                aut = aut.split(" ")
+                exists = db.session.query(Authors.id).filter_by(
+                    first_name=aut[0], second_name=aut[1]).first() is not None
+                a = ""
+                if exists:
+                    a = db.session.query(Authors.id).filter_by(
+                        first_name=aut[0], second_name=aut[1]).first()
+                    a = Authors.query.get(a)
+                else:
+                    a = Authors(first_name=aut[0], second_name=aut[1])
+                    db.session.add(a)
+                a.book_title.append(book)
+
+            for aut in author_list_to_remove:
+                aut = aut.split(" ")
+                author = db.session.query(Authors.id).filter_by(
+                        first_name=aut[0], second_name=aut[1]).first()
+                author = Authors.query.get(author)
+                book.authors.remove(author)
+
+            db.session.commit()
 
     def get_info_for_update(self, book_id):
         book = Book.query.get(book_id)

@@ -1,3 +1,4 @@
+from re import T
 from models import authors
 from models.book import Book
 from models.status import Status
@@ -63,10 +64,10 @@ class CatalogueSQLLite():
 
     def delete_author(self, author_id):
         author = Authors.query.get(author_id)
-        db.session.delete(author)
+        author.hidden = True
         db.session.commit()
 
     def delete_book(self, book_id):
         book = Book.query.get(book_id)
-        db.session.delete(book)
+        book.hidden = True
         db.session.commit()

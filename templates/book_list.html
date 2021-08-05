@@ -20,6 +20,7 @@
         </thead>
         <tbody>
             {% for book in book_list %}
+            {% if book.hidden == False %}
             <tr>
                 <td>{{ book.id }}</td>
                 <td>{{ book.title }}</td>
@@ -42,6 +43,7 @@
                     </form>
                 </td>
             </tr>
+            {% endif %}
             {% endfor %}
 
             <form method="POST" action="/add_book">

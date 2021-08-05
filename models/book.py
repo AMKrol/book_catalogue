@@ -15,6 +15,7 @@ class Book(db.Model):
     authors = db.relationship("Authors",
                               secondary="author",
                               backref=db.backref("book_title", lazy="dynamic"))
+    hidden = db.Column(db.Boolean)
 
     def __str__(self):
         return f"<User {self.title}>"
